@@ -1,0 +1,39 @@
+<apex:page controller="EmailController">
+
+    <apex:form enctype="multipart/form-data">
+
+        <apex:pageMessages />
+
+        <apex:pageBlock title="Send Email with Attachment">
+
+            <apex:pageBlockSection columns="1">
+
+                <!-- Recipient -->
+                <apex:inputText value="{!toAddress}"
+                                label="Recipient Email"/>
+
+                <!-- Subject -->
+                <apex:inputText value="{!subject}"
+                                label="Subject"/>
+
+                <!-- Message -->
+                <apex:inputTextarea value="{!body}"
+                    label="Message"
+                    rows="8"
+                    style="width:400px;height:200px;"/>
+
+                <!-- File Upload -->
+                <apex:inputFile value="{!attachmentBody}"
+                                filename="{!attachmentName}"/>
+
+                <!-- Button -->
+                <apex:commandButton value="Send Email"
+                                    action="{!sendEmail}"/>
+
+            </apex:pageBlockSection>
+
+        </apex:pageBlock>
+
+    </apex:form>
+
+</apex:page>

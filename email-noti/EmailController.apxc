@@ -1,0 +1,96 @@
+public class EmailController {
+
+    public String toAddress {get; set;}
+    public String subject {get; set;}
+    public String body {get; set;}
+
+    // Attachment variables
+    public Blob attachmentBody {get; set;}
+    public String attachmentName {get; set;}
+
+    public PageReference sendEmail() {
+
+        try {
+
+            // Email validation
+            if(String.isBlank(toAddress)) {
+                ApexPages.addMessage(
+                    new ApexPages.Message(
+                        ApexPages.Severity.ERROR,
+                        'Email address is required.'
+                    )
+                );
+                return null;
+            }
+
+            // Simple regex validation
+            String emailRegex = 
+                '^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$';
+
+            Pattern pattern = Pattern.compile(emailRegex);
+            Matcher matcher = pattern.matcher(toAddress);
+
+            if(!matcher.matches()) {
+
+                ApexPages.addMessage(
+                    new ApexPages.Message(
+                        ApexPages.Severity.ERROR,
+                        'Invalid Email Address.'
+                    )
+                );
+
+                return null;
+            }
+
+            // Create email
+            Messaging.SingleEmailMessage mail = 
+                new Messaging.SingleEmailMessage();
+
+            mail.setToAddresses(
+                new List<String>{toAddress}
+            );
+
+            mail.setSubject(subject);
+            mail.setPlainTextBody(body);
+
+            // Attachment handling
+            if(attachmentBody != null) {
+
+                Messaging.EmailFileAttachment attachment =
+                    new Messaging.EmailFileAttachment();
+
+                attachment.setFileName(attachmentName);
+                attachment.setBody(attachmentBody);
+
+                mail.setFileAttachments(
+                    new Messaging.EmailFileAttachment[]
+                    {attachment}
+                );
+            }
+
+            // Send email
+            Messaging.sendEmail(
+                new Messaging.SingleEmailMessage[] {mail}
+            );
+
+            ApexPages.addMessage(
+                new ApexPages.Message(
+                    ApexPages.Severity.CONFIRM,
+                    'Email Sent Successfully!'
+                )
+            );
+
+        }
+        catch(Exception e) {
+
+            ApexPages.addMessage(
+                new ApexPages.Message(
+                    ApexPages.Severity.ERROR,
+                    'Error: ' + e.getMessage()
+                )
+            );
+        }
+
+        return null;
+    }
+}

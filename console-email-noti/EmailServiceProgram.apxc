@@ -1,0 +1,78 @@
+public class EmailServiceProgram {
+
+    // Method WITHOUT attachment
+    public static void sendSimpleEmail() {
+
+        Messaging.SingleEmailMessage mail =
+            new Messaging.SingleEmailMessage();
+
+        mail.setToAddresses(
+            new List<String>{'agtv788@gmail.com'}
+        );
+
+        mail.setSubject(
+            'Salesforce Console Email'
+        );
+
+        mail.setPlainTextBody(
+            'Hello, this is a simple email sent using Apex.'
+        );
+
+        Messaging.sendEmail(
+            new Messaging.SingleEmailMessage[] {mail}
+        );
+
+        System.debug(
+            'Simple Email Sent Successfully'
+        );
+    }
+
+
+    // Method WITH attachment
+    public static void sendEmailWithAttachment() {
+
+        Messaging.SingleEmailMessage mail =
+            new Messaging.SingleEmailMessage();
+
+        mail.setToAddresses(
+            new List<String>{'your_email@gmail.com'}
+        );
+
+        mail.setSubject(
+            'Salesforce Email With Attachment'
+        );
+
+        mail.setPlainTextBody(
+            'Hello, this email contains an attachment.'
+        );
+
+        // Create attachment
+        Messaging.EmailFileAttachment attachment =
+            new Messaging.EmailFileAttachment();
+
+        attachment.setFileName(
+            'sample.txt'
+        );
+
+        attachment.setBody(
+            Blob.valueOf(
+                'This is the attachment content.'
+            )
+        );
+
+        // Attach file
+        mail.setFileAttachments(
+            new Messaging.EmailFileAttachment[]
+            {attachment}
+        );
+
+        // Send email
+        Messaging.sendEmail(
+            new Messaging.SingleEmailMessage[] {mail}
+        );
+
+        System.debug(
+            'Email With Attachment Sent Successfully'
+        );
+    }
+}
