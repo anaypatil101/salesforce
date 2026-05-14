@@ -1,0 +1,28 @@
+<apex:page controller="EmployeeController2" docType="html-5.0">    <apex:form>
+        <apex:sectionHeader title="Employee Management" subtitle="New Employee" />
+        
+        <apex:pageMessages id="msg" />
+
+        <apex:pageBlock title="Employee Information">
+            <apex:pageBlockButtons>
+                <apex:commandButton action="{!saveEmployee}" value="Save Employee" reRender="msg" />
+            </apex:pageBlockButtons>
+
+            <apex:pageBlockSection columns="1">
+                <apex:inputText value="{!empName}" label="Employee Name" required="true" />
+                
+                <apex:inputText value="{!empId}" label="Employee ID" />
+                
+                <apex:inputText value="{!salary}" label="Salary" />
+                
+                <apex:inputText value="{!email}" label="Email" />
+                
+                <apex:selectList value="{!department}" label="Department" size="1">
+                    <apex:selectOptions value="{!deptOptions}" />
+                </apex:selectList>
+                
+                <apex:input value="{!joiningDate}" label="Joining Date" type="date" />
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,61 @@
+public class EmployeeController2 {
+    // These properties bind to the Visualforce page
+    public String empName { get; set; }
+    public Integer empId { get; set; }
+    public Decimal salary { get; set; }
+    public String email { get; set; }
+    public String department { get; set; }
+    public Date joiningDate { get; set; }
+
+    // Picklist options for the Department
+    public List<SelectOption> getDeptOptions() {
+        List<SelectOption> options = new List<SelectOption>();
+        options.add(new SelectOption('', '--Select Department--'));
+        options.add(new SelectOption('Engineering', 'Engineering'));
+        options.add(new SelectOption('Sales', 'Sales'));
+        options.add(new SelectOption('HR', 'HR'));
+        return options;
+    }
+
+    public PageReference saveEmployee() {
+        Boolean hasError = false;
+
+        // 1. Name Validation
+        if (String.isBlank(empName) || empName.length() < 3) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Name must be at least 3 characters.'));
+            hasError = true;
+        }
+
+        // 2. ID Validation (> 0)
+        if (empId == null || empId <= 0) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Employee ID must be greater than 0.'));
+            hasError = true;
+        }
+
+        // 3. Salary Validation
+        if (salary == null || salary <= 10000 || salary >= 500000) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Salary must be between 10,000 and 500,000.'));
+            hasError = true;
+        }
+
+        // 4. Joining Date Validation
+        if (joiningDate != null && joiningDate > Date.today()) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Joining Date cannot be in the future.'));
+            hasError = true;
+        }
+
+        if (hasError) return null;
+
+        try {
+            // Logic to insert the record into your custom object would go here
+            // e.g., Employee__c newEmp = new Employee__c(Name=empName, ID__c=empId...);
+            // insert newEmp;
+            
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.CONFIRM, 'Employee saved successfully!'));
+        } catch (Exception e) {
+            ApexPages.addMessages(e);
+        }
+        
+        return null;
+    }
+}
